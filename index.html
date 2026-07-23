@@ -53,9 +53,6 @@ nav {
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: -0.5px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .nav-links {
@@ -83,7 +80,7 @@ nav {
 
 /* HERO BANNER */
 .hero {
-    height: 60vh;
+    height: 45vh;
     background: linear-gradient(to top, var(--bg-dark), transparent),
                 linear-gradient(to right, rgba(0,0,0,0.85), transparent),
                 url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80') center/cover;
@@ -98,16 +95,14 @@ nav {
 }
 
 .hero h1 {
-    font-size: 3.2rem;
+    font-size: 3rem;
     font-weight: 800;
     margin-bottom: 10px;
-    line-height: 1.1;
 }
 
 .hero p {
     color: var(--text-muted);
-    margin-bottom: 24px;
-    font-size: 1.1rem;
+    margin-bottom: 20px;
 }
 
 /* MAIN CONTENT */
@@ -128,7 +123,7 @@ h2 span {
 /* MOVIE GRID */
 .movie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
 }
 
@@ -136,36 +131,42 @@ h2 span {
     background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
-    cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
 }
 
 .movie-card:hover {
-    transform: translateY(-8px);
     border-color: rgba(255, 152, 0, 0.4);
     box-shadow: 0 10px 25px rgba(255, 152, 0, 0.15);
 }
 
-.movie-thumb {
+.movie-video {
     width: 100%;
-    height: 300px;
+    height: 180px;
+    background: #000;
     object-fit: cover;
 }
 
 .movie-info {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 .movie-title {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
 }
 
 .movie-genre {
     font-size: 0.85rem;
     color: var(--text-muted);
-    margin-top: 6px;
+    margin-top: 4px;
+    margin-bottom: 12px;
 }
 
 /* UPLOAD SECTION */
@@ -173,7 +174,7 @@ h2 span {
     background: var(--card-bg);
     padding: 35px;
     border-radius: 16px;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -190,7 +191,7 @@ h2 span {
     color: var(--text-muted);
 }
 
-.form-group input {
+.form-group input, .form-group select {
     width: 100%;
     padding: 14px;
     background: #25252a;
@@ -198,14 +199,36 @@ h2 span {
     color: #fff;
     border-radius: 8px;
     outline: none;
-    transition: 0.2s ease;
 }
 
 .form-group input:focus {
     border-color: var(--primary);
 }
 
-/* VIDEO PLAYER MODAL */
+.upload-type-selector {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 10px;
+    background: #25252a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.type-btn.active {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+}
+
+/* FULLSCREEN MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -226,12 +249,12 @@ h2 span {
     border-radius: 12px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 0 40px rgba(255, 152, 0, 0.2);
 }
 
-video {
+#fullscreenPlayer {
     width: 100%;
     height: auto;
+    max-height: 80vh;
     display: block;
 }
 
@@ -243,7 +266,6 @@ video {
     font-size: 2.2rem;
     cursor: pointer;
     z-index: 1001;
-    transition: 0.2s ease;
 }
 
 .close-btn:hover {
@@ -264,37 +286,25 @@ video {
 <div class="hero">
     <div class="hero-content">
         <h1>Welcome to FryedCinema</h1>
-        <p>Watch, stream, and upload your favorite video files directly inside your browser.</p>
-        <button class="btn" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">▶ Play Featured Movie</button>
+        <p>20 Free classic movies ready to stream instantly. Upload local files or paste direct video URLs to add your own!</p>
+        <button class="btn" onclick="openFullscreen('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">▶ Featured Movie</button>
     </div>
 </div>
 
 <section id="library">
-    <h2>Movie <span>Library</span></h2>
-    <div class="movie-grid" id="movieGrid">
-        
-        <div class="movie-card" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">
-            <img class="movie-thumb" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80" alt="Thumbnail">
-            <div class="movie-info">
-                <div class="movie-title">Big Buck Bunny</div>
-                <div class="movie-genre">Animation • 2008</div>
-            </div>
-        </div>
-
-        <div class="movie-card" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4')">
-            <img class="movie-thumb" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=400&q=80" alt="Thumbnail">
-            <div class="movie-info">
-                <div class="movie-title">Elephant's Dream</div>
-                <div class="movie-genre">Sci-Fi • 2006</div>
-            </div>
-        </div>
-
-    </div>
+    <h2>Movie <span>Library (20 Free Movies)</span></h2>
+    <div class="movie-grid" id="movieGrid"></div>
 </section>
 
 <section id="upload">
-    <h2>Upload to <span>FryedCinema</span></h2>
+    <h2>Add to <span>FryedCinema</span></h2>
     <div class="upload-card">
+        
+        <div class="upload-type-selector">
+            <button class="type-btn active" id="btnUrl" onclick="setUploadType('url')">Paste Video URL</button>
+            <button class="type-btn" id="btnFile" onclick="setUploadType('file')">Upload Local File</button>
+        </div>
+
         <form id="uploadForm">
             <div class="form-group">
                 <label>Movie Title</label>
@@ -302,83 +312,152 @@ video {
             </div>
             <div class="form-group">
                 <label>Genre / Category</label>
-                <input type="text" id="movieGenre" placeholder="e.g. Action, Comedy, Drama" required>
+                <input type="text" id="movieGenre" placeholder="e.g. Sci-Fi, Comedy, Action" required>
             </div>
-            <div class="form-group">
-                <label>Select Video File</label>
-                <input type="file" id="videoFile" accept="video/*" required>
+
+            <div class="form-group" id="urlGroup">
+                <label>Direct Video URL (.mp4, .webm)</label>
+                <input type="url" id="movieUrl" placeholder="https://example.com/movie.mp4">
             </div>
-            <button type="submit" class="btn" style="width: 100%;">Upload Movie</button>
+
+            <div class="form-group" id="fileGroup" style="display: none;">
+                <label>Select Local Video File</label>
+                <input type="file" id="videoFile" accept="video/*">
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%;">Add Movie to Library</button>
         </form>
     </div>
 </section>
 
 <div class="modal" id="videoModal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closePlayer()">&times;</span>
-        <video id="player" controls>
-            <source id="videoSource" src="" type="video/mp4">
+        <span class="close-btn" onclick="closeFullscreen()">&times;</span>
+        <video id="fullscreenPlayer" controls>
+            <source id="fullscreenSource" src="" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
     </div>
 </div>
 
 <script>
-const modal = document.getElementById('videoModal');
-const player = document.getElementById('player');
-const videoSource = document.getElementById('videoSource');
-const uploadForm = document.getElementById('uploadForm');
+// 20 PRE-LOADED FREE MOVIES / STREAMS
+const defaultMovies = [
+    { title: "Big Buck Bunny", genre: "Animation • 2008", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+    { title: "Oceans World", genre: "Documentary • 2010", url: "https://vjs.zencdn.net/v/oceans.mp4" },
+    { title: "Elephant's Dream", genre: "Sci-Fi • 2006", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
+    { title: "For Bigger Blazes", genre: "Action • 2015", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+    { title: "Sintel", genre: "Fantasy • 2010", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+    { title: "For Bigger Escapes", genre: "Adventure • 2016", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+    { title: "Tears of Steel", genre: "Sci-Fi • 2012", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+    { title: "Subway Express", genre: "Short Film • 2021", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Subway.mp4" },
+    { title: "For Bigger Fun", genre: "Comedy • 2017", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+    { title: "For Bigger Joyrides", genre: "Action • 2018", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" },
+    { title: "We Are Going On Bullrun", genre: "Documentary • 2019", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4" },
+    { title: "What Car Can You Get", genre: "Entertainment • 2020", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4" },
+    { title: "Chromecast Launch", genre: "Tech • 2013", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TechTalk.mp4" },
+    { title: "Pixel Dream", genre: "Animation • 2021", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+    { title: "Deep Sea Wonders", genre: "Nature • 2015", url: "https://vjs.zencdn.net/v/oceans.mp4" },
+    { title: "The Steel Chronicles", genre: "Sci-Fi • 2013", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+    { title: "Dragon Quest", genre: "Fantasy • 2011", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+    { title: "Velocity Pursuit", genre: "Thriller • 2018", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+    { title: "Cyber Escape", genre: "Action • 2019", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+    { title: "The Grand Journey", genre: "Adventure • 2022", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" }
+];
+
 const movieGrid = document.getElementById('movieGrid');
+const modal = document.getElementById('videoModal');
+const fullscreenPlayer = document.getElementById('fullscreenPlayer');
+const fullscreenSource = document.getElementById('fullscreenSource');
+const uploadForm = document.getElementById('uploadForm');
 
-// Open Video Player
-function playVideo(url) {
-    videoSource.src = url;
-    player.load();
-    modal.style.display = 'flex';
-    player.play();
+let currentUploadType = 'url';
+
+// Load default 20 movies on page startup
+function loadMovies() {
+    defaultMovies.forEach(movie => {
+        addMovieCard(movie.title, movie.genre, movie.url);
+    });
 }
 
-// Close Video Player
-function closePlayer() {
-    modal.style.display = 'none';
-    player.pause();
-    videoSource.src = "";
+// Helper to append a card to grid
+function addMovieCard(title, genre, url) {
+    const card = document.createElement('div');
+    card.className = 'movie-card';
+    card.innerHTML = `
+        <video class="movie-video" controls preload="metadata">
+            <source src="${url}" type="video/mp4">
+        </video>
+        <div class="movie-info">
+            <div>
+                <div class="movie-title">${title}</div>
+                <div class="movie-genre">${genre}</div>
+            </div>
+            <button class="btn" style="width: 100%; padding: 8px; margin-top: 10px;" onclick="openFullscreen('${url}')">Watch Fullscreen</button>
+        </div>
+    `;
+    movieGrid.appendChild(card);
 }
 
-// Local File Upload Handler
+// Toggle URL vs File upload inputs
+function setUploadType(type) {
+    currentUploadType = type;
+    if (type === 'url') {
+        document.getElementById('urlGroup').style.display = 'block';
+        document.getElementById('fileGroup').style.display = 'none';
+        document.getElementById('btnUrl').classList.add('active');
+        document.getElementById('btnFile').classList.remove('active');
+        document.getElementById('movieUrl').required = true;
+        document.getElementById('videoFile').required = false;
+    } else {
+        document.getElementById('urlGroup').style.display = 'none';
+        document.getElementById('fileGroup').style.display = 'block';
+        document.getElementById('btnFile').classList.add('active');
+        document.getElementById('btnUrl').classList.remove('active');
+        document.getElementById('movieUrl').required = false;
+        document.getElementById('videoFile').required = true;
+    }
+}
+
+// Handle Form Submission
 uploadForm.addEventListener('submit', function(e) {
     e.preventDefault();
-
     const title = document.getElementById('movieTitle').value;
     const genre = document.getElementById('movieGenre').value;
-    const fileInput = document.getElementById('videoFile');
-    const file = fileInput.files[0];
+    let videoURL = "";
 
-    if (file) {
-        // Create local Blob URL to play immediately from browser memory
-        const videoURL = URL.createObjectURL(file);
+    if (currentUploadType === 'url') {
+        videoURL = document.getElementById('movieUrl').value;
+    } else {
+        const file = document.getElementById('videoFile').files[0];
+        if (file) {
+            videoURL = URL.createObjectURL(file);
+        }
+    }
 
-        // Create new Movie Card HTML
-        const newCard = document.createElement('div');
-        newCard.className = 'movie-card';
-        newCard.onclick = function() { playVideo(videoURL); };
-        
-        newCard.innerHTML = `
-            <img class="movie-thumb" src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80" alt="Thumbnail">
-            <div class="movie-info">
-                <div class="movie-title">${title}</div>
-                <div class="movie-genre">${genre} • Uploaded</div>
-            </div>
-        `;
-
-        // Add card to grid
-        movieGrid.appendChild(newCard);
-
-        // Reset form
+    if (videoURL) {
+        addMovieCard(title, genre + " • Added", videoURL);
         uploadForm.reset();
-        alert('Movie uploaded to FryedCinema library!');
+        alert('Movie added to FryedCinema!');
     }
 });
+
+// Fullscreen functions
+function openFullscreen(url) {
+    fullscreenSource.src = url;
+    fullscreenPlayer.load();
+    modal.style.display = 'flex';
+    fullscreenPlayer.play();
+}
+
+function closeFullscreen() {
+    modal.style.display = 'none';
+    fullscreenPlayer.pause();
+    fullscreenSource.src = "";
+}
+
+// Run loader
+loadMovies();
 </script>
 
 </body>
