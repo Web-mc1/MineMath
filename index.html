@@ -3,77 +3,277 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supabase Test</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Minecraft Math Toolkit</title>
   <style>
-    body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; background: #0f172a; color: #fff; }
-    input, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid #334155; }
-    input { background: #1e293b; color: #fff; }
-    button { background: #3b82f6; color: white; font-weight: bold; cursor: pointer; border: none; }
-    .card { background: #1e293b; padding: 15px; border-radius: 8px; margin-top: 10px; }
+    :root {
+      --bg-color: #1e1e2e;
+      --card-bg: #2b2b3d;
+      --accent-color: #55ff55;
+      --text-color: #ffffff;
+      --border-color: #44445a;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--accent-color);
+      margin-top: 0;
+    }
+
+    /* Tabs Layout */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: #181825;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--accent-color);
+      color: #000;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Form Styles */
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #181825;
+      color: #fff;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    .result-box {
+      margin-top: 15px;
+      padding: 15px;
+      background: #181825;
+      border-left: 4px solid var(--accent-color);
+      border-radius: 4px;
+    }
+
+    /* Canvas Grid */
+    canvas {
+      display: block;
+      margin: 15px auto 0 auto;
+      background: #111;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Create Profile</h2>
-  <input type="text" id="username" placeholder="Username (e.g. alex)">
-  <input type="text" id="displayName" placeholder="Display Name (e.g. Alex Smith)">
-  <input type="text" id="bio" placeholder="Bio">
-  <button onclick="createProfile()">Save Profile to Supabase</button>
+<div class="container">
+  <h1>Minecraft Math Toolkit</h1>
 
-  <h2>Live Profiles</h2>
-  <div id="profiles-list">Loading...</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('nether')">Nether Portal</button>
+    <button class="tab-btn" onclick="switchTab('stacks')">Stack Calc</button>
+    <button class="tab-btn" onclick="switchTab('circle')">Circle Generator</button>
+    <button class="tab-btn" onclick="switchTab('beacon')">Beacon Planner</button>
+  </div>
 
-  <script>
-    // Initialize Supabase with your live credentials
-    const SUPABASE_URL = "https://umvacebilzgynalsuzhk.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_bDq8nyRIbp7c4nskplTg9g_JXEOXvnL";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <div id="nether" class="tab-content active">
+    <h3>Nether Portal Coordinate Calculator</h3>
+    <div class="input-group">
+      <label>Direction</label>
+      <select id="nether-dir" onchange="calcNether()">
+        <option value="toNether">Overworld -> Nether</option>
+        <option value="toOverworld">Nether -> Overworld</option>
+      </select>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <div class="input-group" style="flex: 1;">
+        <label>X Coordinate</label>
+        <input type="number" id="nether-x" value="100" oninput="calcNether()">
+      </div>
+      <div class="input-group" style="flex: 1;">
+        <label>Z Coordinate</label>
+        <input type="number" id="nether-z" value="200" oninput="calcNether()">
+      </div>
+    </div>
+    <div class="result-box" id="nether-output">Target Coordinates: ...</div>
+  </div>
 
-    // Fetch and display profiles from database
-    async function loadProfiles() {
-      const { data, error } = await supabase.from('profiles').select('*');
-      const container = document.getElementById('profiles-list');
-      
-      if (error) {
-        container.innerHTML = `<p style="color: #ef4444">Error: ${error.message}</p>`;
-        return;
-      }
+  <div id="stacks" class="tab-content">
+    <h3>Item Stack & Storage Calculator</h3>
+    <div class="input-group">
+      <label>Total Items Required</label>
+      <input type="number" id="stack-count" value="1500" min="0" oninput="calcStacks()">
+    </div>
+    <div class="result-box" id="stack-output">Storage breakdown: ...</div>
+  </div>
 
-      if (data.length === 0) {
-        container.innerHTML = "<p>No profiles found yet. Make sure you ran the SQL setup script in Supabase!</p>";
-        return;
-      }
+  <div id="circle" class="tab-content">
+    <h3>Circle Grid Generator</h3>
+    <div class="input-group">
+      <label>Radius (Blocks): <span id="radius-val">8</span></label>
+      <input type="range" id="circle-radius" min="1" max="20" value="8" oninput="drawCircle()">
+    </div>
+    <canvas id="circleCanvas" width="300" height="300"></canvas>
+  </div>
 
-      container.innerHTML = data.map(p => `
-        <div class="card">
-          <h3>${p.display_name} (@${p.username})</h3>
-          <p>${p.bio || 'No bio provided'}</p>
-        </div>
-      `).join('');
+  <div id="beacon" class="tab-content">
+    <h3>Beacon Pyramid Planner</h3>
+    <div class="input-group">
+      <label>Pyramid Level</label>
+      <select id="beacon-level" onchange="calcBeacon()">
+        <option value="1">Level 1 (3x3 Base)</option>
+        <option value="2">Level 2 (5x5 Base)</option>
+        <option value="3">Level 3 (7x7 Base)</option>
+        <option value="4" selected>Level 4 (9x9 Base)</option>
+      </select>
+    </div>
+    <div class="result-box" id="beacon-output">Beacon requirements: ...</div>
+  </div>
+</div>
+
+<script>
+  // Tab Switching Handler
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+
+    if (tabId === 'circle') drawCircle();
+  }
+
+  // 1. Nether Calculator
+  function calcNether() {
+    const dir = document.getElementById('nether-dir').value;
+    const x = parseFloat(document.getElementById('nether-x').value) || 0;
+    const z = parseFloat(document.getElementById('nether-z').value) || 0;
+
+    let targetX, targetZ;
+    if (dir === 'toNether') {
+      targetX = Math.floor(x / 8);
+      targetZ = Math.floor(z / 8);
+    } else {
+      targetX = x * 8;
+      targetZ = z * 8;
     }
 
-    // Insert a new profile into the database
-    async function createProfile() {
-      const username = document.getElementById('username').value;
-      const displayName = document.getElementById('displayName').value;
-      const bio = document.getElementById('bio').value;
+    document.getElementById('nether-output').innerText = 
+      `Target Location: X: ${targetX} | Z: ${targetZ}`;
+  }
 
-      if (!username) return alert('Please enter a username');
+  // 2. Stack Calculator
+  function calcStacks() {
+    const total = parseInt(document.getElementById('stack-count').value) || 0;
+    const stacks = Math.floor(total / 64);
+    const remainder = total % 64;
+    const doubleChests = (stacks / 54).toFixed(1);
 
-      const { data, error } = await supabase.from('profiles').insert([
-        { username: username, display_name: displayName, bio: bio }
-      ]);
+    document.getElementById('stack-output').innerHTML = 
+      `<strong>${total} Items</strong> =<br>` +
+      `• ${stacks} Stacks + ${remainder} Leftover Items<br>` +
+      `• ~${doubleChests} Double Chests needed`;
+  }
 
-      if (error) {
-        alert('Error saving profile: ' + error.message);
-      } else {
-        alert('Profile created successfully!');
-        loadProfiles();
+  // 3. Circle Canvas Drawing
+  function drawCircle() {
+    const radius = parseInt(document.getElementById('circle-radius').value);
+    document.getElementById('radius-val').innerText = radius;
+
+    const canvas = document.getElementById('circleCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 2 * radius + 1;
+    const cellSize = canvas.width / gridSize;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let x = -radius; x <= radius; x++) {
+      for (let z = -radius; z <= radius; z++) {
+        const dist = Math.sqrt(x * x + z * z);
+        const px = (x + radius) * cellSize;
+        const pz = (z + radius) * cellSize;
+
+        if (dist <= radius + 0.4 && dist >= radius - 0.5) {
+          ctx.fillStyle = '#55ff55'; // Filled block
+          ctx.fillRect(px, pz, cellSize, cellSize);
+        }
+
+        ctx.strokeStyle = '#2b2b3d'; // Grid lines
+        ctx.strokeRect(px, pz, cellSize, cellSize);
       }
     }
+  }
 
-    loadProfiles();
-  </script>
+  // 4. Beacon Calculator
+  function calcBeacon() {
+    const level = parseInt(document.getElementById('beacon-level').value);
+    const levelBlocks = [0, 9, 34, 83, 164];
+    
+    const blocks = levelBlocks[level];
+    const ingots = blocks * 9;
+    const stacks = Math.floor(blocks / 64);
+    const leftover = blocks % 64;
+
+    document.getElementById('beacon-output').innerHTML = 
+      `<strong>Level ${level} Pyramid Requirements:</strong><br>` +
+      `• Total Mineral Blocks: <strong>${blocks}</strong> (${stacks} stacks + ${leftover})<br>` +
+      `• Total Raw Ingots Needed: <strong>${ingots.toLocaleString()}</strong>`;
+  }
+
+  // Initial Calculation Run on Page Load
+  calcNether();
+  calcStacks();
+  calcBeacon();
+</script>
+
 </body>
 </html>
