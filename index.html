@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FlixHub | Watch & Upload</title>
+<title>FryedCinema | Watch & Upload</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,12 +11,12 @@
 
 <style>
 :root {
-    --primary: #e50914;
-    --primary-hover: #b80710;
-    --bg-dark: #141414;
-    --card-bg: #1f1f1f;
+    --primary: #ff9800;
+    --primary-hover: #e68a00;
+    --bg-dark: #0f0f11;
+    --card-bg: #1a1a1e;
     --text-main: #ffffff;
-    --text-muted: #aaaaaa;
+    --text-muted: #a0a0ab;
 }
 
 *{
@@ -38,12 +38,13 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 20px 5%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(15, 15, 17, 0.85);
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 152, 0, 0.1);
 }
 
 .logo {
@@ -51,6 +52,10 @@ nav {
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .nav-links {
@@ -60,12 +65,12 @@ nav {
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 10px 22px;
     background: var(--primary);
-    color: #fff;
+    color: #000;
     border: none;
-    border-radius: 6px;
-    font-weight: 600;
+    border-radius: 8px;
+    font-weight: 700;
     cursor: pointer;
     transition: 0.2s ease;
     text-decoration: none;
@@ -73,13 +78,14 @@ nav {
 
 .btn:hover {
     background: var(--primary-hover);
+    transform: translateY(-2px);
 }
 
 /* HERO BANNER */
 .hero {
     height: 60vh;
     background: linear-gradient(to top, var(--bg-dark), transparent),
-                linear-gradient(to right, rgba(0,0,0,0.8), transparent),
+                linear-gradient(to right, rgba(0,0,0,0.85), transparent),
                 url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80') center/cover;
     display: flex;
     align-items: center;
@@ -88,18 +94,20 @@ nav {
 }
 
 .hero-content {
-    max-width: 500px;
+    max-width: 550px;
 }
 
 .hero h1 {
-    font-size: 3rem;
+    font-size: 3.2rem;
     font-weight: 800;
     margin-bottom: 10px;
+    line-height: 1.1;
 }
 
 .hero p {
     color: var(--text-muted);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    font-size: 1.1rem;
 }
 
 /* MAIN CONTENT */
@@ -108,57 +116,66 @@ section {
 }
 
 h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+}
+
+h2 span {
+    color: var(--primary);
 }
 
 /* MOVIE GRID */
 .movie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
 }
 
 .movie-card {
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .movie-card:hover {
     transform: translateY(-8px);
+    border-color: rgba(255, 152, 0, 0.4);
+    box-shadow: 0 10px 25px rgba(255, 152, 0, 0.15);
 }
 
 .movie-thumb {
     width: 100%;
-    height: 280px;
+    height: 300px;
     object-fit: cover;
 }
 
 .movie-info {
-    padding: 15px;
+    padding: 16px;
 }
 
 .movie-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
 }
 
 .movie-genre {
     font-size: 0.85rem;
     color: var(--text-muted);
-    margin-top: 5px;
+    margin-top: 6px;
 }
 
 /* UPLOAD SECTION */
 .upload-card {
     background: var(--card-bg);
-    padding: 30px;
-    border-radius: 12px;
+    padding: 35px;
+    border-radius: 16px;
     max-width: 600px;
     margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .form-group {
@@ -169,17 +186,23 @@ h2 {
     display: block;
     margin-bottom: 8px;
     font-size: 0.9rem;
+    font-weight: 600;
     color: var(--text-muted);
 }
 
-.form-group input, .form-group select {
+.form-group input {
     width: 100%;
-    padding: 12px;
-    background: #2b2b2b;
-    border: 1px solid #333;
+    padding: 14px;
+    background: #25252a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
     outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--primary);
 }
 
 /* VIDEO PLAYER MODAL */
@@ -190,7 +213,7 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.92);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -198,11 +221,12 @@ h2 {
 
 .modal-content {
     width: 90%;
-    max-width: 900px;
+    max-width: 960px;
     background: #000;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 40px rgba(255, 152, 0, 0.2);
 }
 
 video {
@@ -216,32 +240,37 @@ video {
     top: 15px;
     right: 20px;
     color: #fff;
-    font-size: 2rem;
+    font-size: 2.2rem;
     cursor: pointer;
     z-index: 1001;
+    transition: 0.2s ease;
+}
+
+.close-btn:hover {
+    color: var(--primary);
 }
 </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">FlixHub</div>
+    <div class="logo">🍿 FryedCinema</div>
     <div class="nav-links">
-        <a href="#library" class="btn" style="background: transparent;">Library</a>
+        <a href="#library" class="btn" style="background: transparent; color: #fff;">Library</a>
         <a href="#upload" class="btn">Upload Movie</a>
     </div>
 </nav>
 
 <div class="hero">
     <div class="hero-content">
-        <h1>Featured Film</h1>
-        <p>Watch full HD community-uploaded movies directly from your web browser.</p>
-        <button class="btn" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">▶ Play Now</button>
+        <h1>Welcome to FryedCinema</h1>
+        <p>Watch, stream, and upload your favorite video files directly inside your browser.</p>
+        <button class="btn" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">▶ Play Featured Movie</button>
     </div>
 </div>
 
 <section id="library">
-    <h2>All Movies</h2>
+    <h2>Movie <span>Library</span></h2>
     <div class="movie-grid" id="movieGrid">
         
         <div class="movie-card" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">
@@ -264,22 +293,22 @@ video {
 </section>
 
 <section id="upload">
-    <h2>Upload a Movie</h2>
+    <h2>Upload to <span>FryedCinema</span></h2>
     <div class="upload-card">
         <form id="uploadForm">
             <div class="form-group">
                 <label>Movie Title</label>
-                <input type="text" id="movieTitle" placeholder="Enter title" required>
+                <input type="text" id="movieTitle" placeholder="Enter movie title" required>
             </div>
             <div class="form-group">
                 <label>Genre / Category</label>
-                <input type="text" id="movieGenre" placeholder="e.g. Action, Sci-Fi" required>
+                <input type="text" id="movieGenre" placeholder="e.g. Action, Comedy, Drama" required>
             </div>
             <div class="form-group">
                 <label>Select Video File</label>
                 <input type="file" id="videoFile" accept="video/*" required>
             </div>
-            <button type="submit" class="btn" style="width: 100%;">Upload & Add to Library</button>
+            <button type="submit" class="btn" style="width: 100%;">Upload Movie</button>
         </form>
     </div>
 </section>
@@ -347,7 +376,7 @@ uploadForm.addEventListener('submit', function(e) {
 
         // Reset form
         uploadForm.reset();
-        alert('Movie uploaded to your browser session!');
+        alert('Movie uploaded to FryedCinema library!');
     }
 });
 </script>
